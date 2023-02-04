@@ -6,13 +6,13 @@ import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  providers: [UserService],
-  controllers: [UserController],
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
       secret: `${process.env.JWT_SECRET}`,
     }),
   ],
+  providers: [UserService],
+  controllers: [UserController],
 })
 export class UserModule {}

@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly model: Model<UserDocument>,
-    private jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -32,7 +31,7 @@ export class UserService {
     };
   }
 
-  async logIn(email: string, password: string) {
+  async logIn({ email, password }) {
     console.log('email: ', email);
     const user = await this.model.findOne({ email: email });
     if (!user || user.password !== password) {
@@ -40,10 +39,10 @@ export class UserService {
         message: 'Invalid username or password',
       };
     }
-    const payload = { email: user.email, name: user.name };
+    const access_token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
     return {
       message: 'User is logged in and access token is generated!!',
-      access_token: this.jwtService.sign(payload),
+      access_token,
     };
   }
 }
