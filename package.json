@@ -64,8 +64,9 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "rootDir": "test",
+    "testRegex": ".spec.ts$",
+    "testTimeout": 2000000,
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

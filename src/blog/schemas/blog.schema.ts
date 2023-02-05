@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { User } from '../../user/schemas/user.schema';
 
 export type BlogDocument = HydratedDocument<Blog>;
 
@@ -11,8 +12,8 @@ export class Blog {
   @Prop({ required: true })
   description: string;
 
-  @Prop()
-  createdBy: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  createdBy: User;
 
   @Prop()
   createdOn: string;

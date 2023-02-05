@@ -1,7 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Request, Get } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
-@Controller()
+@Controller('/user')
 export class UserController {
   constructor(private readonly service: UserService) {}
 
@@ -11,10 +11,8 @@ export class UserController {
   }
 
   @Post('/log-in')
-  async logIn(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    return await this.service.logIn(email, password);
+  async logIn(@Request() req) {
+    console.log(req.body);
+    return await this.service.logIn(req.body);
   }
 }

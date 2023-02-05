@@ -17,6 +17,7 @@ import { BlogModule } from './blog/blog.module';
     UserModule,
     BlogModule,
   ],
+  providers: [],
   controllers: [AppController],
 })
 export class AppModule implements NestModule {
@@ -29,6 +30,7 @@ export class AppModule implements NestModule {
           method: RequestMethod.POST,
         },
         { path: 'user/create-user', method: RequestMethod.GET },
+        { path: '/', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
