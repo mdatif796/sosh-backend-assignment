@@ -31,13 +31,15 @@ export class BlogService {
 
   async delete(blogId: string, userEmail: string) {
     try {
-      const blog = await this.model.findById(blogId);
+      let blog = await this.model.findById(blogId);
       if (!blog) {
-        return {
-          message: 'blog does not exist',
-        };
+        throw new UnauthorizedException();
       }
+      blog = await blog.populate('createdBy');
+      console.log('blog: ', blog);
       if (blog.createdBy.email !== userEmail) {
+        console.log('userEmail: ', userEmail);
+        console.log('blog.createdBy.email: ', blog.createdBy.email);
         throw new UnauthorizedException();
       }
       await blog.delete();
@@ -54,12 +56,10 @@ export class BlogService {
   async update(blogId: string, userEmail: string, { title, description }) {
     try {
       let blog = await this.model.findById(blogId);
-      blog = await blog.populate('createdBy');
       if (!blog) {
-        return {
-          message: 'blog does not exist',
-        };
+        throw new UnauthorizedException();
       }
+      blog = await blog.populate('createdBy');
       if (blog.createdBy.email !== userEmail) {
         throw new UnauthorizedException();
       }
